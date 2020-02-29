@@ -1,8 +1,11 @@
-const mapboxTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  });
+// var mapboxTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+//     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+//   });
+var mapboxTiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',{
+  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>'
+});
 
-  const map = L.map('map', { maxZoom: 12 });
+  var map = L.map('map', { maxZoom: 12 });
     map.addLayer(mapboxTiles);
     map.setView([23.725969, 120.565414], 9);
 
@@ -17,11 +20,11 @@ const mapboxTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.
   }
 
   function generateGeoJson(data) {
-    const geoJson = {}
+    var geoJson = {}
     geoJson['type']= 'FeatureCollection';
     geoJson['features'] = [];
                             
-    data.map((item, index) => 
+    data.slice(0,4).map((item, index) => 
       geoJson['features'].push(
       {
         type: 'Feature',
@@ -45,7 +48,11 @@ const mapboxTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.
       overlayPane.select("svg").remove(); // reset
     }
 
+    count = geoJson.features.length/2 > count ? count : 0;
+
     var svg = overlayPane.append("svg");
+    svg.append("defs").append("pattern").attr("id","marker-image").attr("width", "20").attr("height", "20")
+		   .append("image").attr("xlink:href","./marker.png").attr("width", "20").attr("height", "20");
     var g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
     linePath = null;
@@ -96,7 +103,7 @@ const mapboxTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.
       .attr("class", "lineConnect");
     
     marker = g.append("circle")
-      .attr("r", 10)
+      .attr("r", 12)
       .attr("id", "marker")
       .attr("class", "travelMarker");
 
@@ -107,8 +114,9 @@ const mapboxTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.
       .data(originANDdestination)
       .enter()
       .append("circle", ".station")
-      .attr("r", 5)
-      .style("fill", "red")
+      .attr("r", 10)
+      // .style("fill", "red")
+      .style("fill", "url('#marker-image')")
       .style("opacity", "1");
 
     text = g.selectAll("text")
@@ -119,8 +127,14 @@ const mapboxTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.
         return d.properties.name
       })
       .attr("class", "locnames")
+      // .attr("y", function(d) {
+      //   return -10
+      // });
+      .attr("x", function(d) {
+        return 20
+      })
       .attr("y", function(d) {
-        return -10
+        return 5
       });
 
       count ++;
@@ -167,8 +181,8 @@ const mapboxTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.
       var svg = overlayPane.select("svg");
       var g = svg.select("g");
 
-      svg.attr("width", bottomRight[0] - topLeft[0] + 120)
-        .attr("height", bottomRight[1] - topLeft[1] + 120)
+      svg.attr("width", bottomRight[0] - topLeft[0] + 200)
+        .attr("height", bottomRight[1] - topLeft[1] + 200)
         .style("left", topLeft[0] - 50 + "px")
         .style("top", topLeft[1] - 50 + "px");
 
@@ -193,13 +207,13 @@ const mapboxTiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.
     }
 
     function applyLatLngToLayer(d) {
-      var y = d.geometry.coordinates[1];
-      var x = d.geometry.coordinates[0];
+      let y = d.geometry.coordinates[1];
+      let x = d.geometry.coordinates[0];
       return map.latLngToLayerPoint(new L.LatLng(y, x));
     }
 
     d3.json("https://wapi.gogoro.com/tw/api/vm/list", function(collection){
-      const geoJson = generateGeoJson(collection.data);
+      var geoJson = generateGeoJson(collection.data);
 
       map.on("viewreset", reset);
       transition();

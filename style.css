@@ -22,7 +22,6 @@ body {
 #map {
     width: 100%;
     height: calc( 100vh - 64px );
-    /* z-index: -1; */
 }
 svg {
     position: relative;
@@ -30,7 +29,7 @@ svg {
 path {
     fill: yellow;
     stroke-width: 2px;
-    stroke: red;
+    /* stroke: red; */
     stroke-opacity: 1;
 }
 .travelMarker {
@@ -42,17 +41,21 @@ path {
     opacity: 0;
 }
 .station {
-    stroke: black;
-    fill: red;
+    background-image: url('./marker.png');
 }
 .lineConnect {
     fill: none;
-    stroke: black;
+    stroke: grey;
+    stroke-width: 3;
     opacity: 1;
 }
 .locnames {
-    fill: black;
-    text-shadow: 1px 1px 1px #FFF, 3px 3px 5px #000;
+    /* fill: #173e6f;
+    font-size: 14px;
     font-weight: bold;
-    font-size: 13px;
+    text-shadow: 2px 2px 1px #fff; */
+    fill: #afeffd;
+    font-size: 14px;
+    font-weight: bold;
+    text-shadow: 0px 0px 5px #173e6f;
 }
