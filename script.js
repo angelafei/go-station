@@ -24,7 +24,7 @@ var mapboxTiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}
     geoJson['type']= 'FeatureCollection';
     geoJson['features'] = [];
                             
-    data.slice(0,4).map((item, index) => 
+    data.map((item, index) => 
       geoJson['features'].push(
       {
         type: 'Feature',
