@@ -31,18 +31,6 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
     };
   }
   else {
-    // if (typeof define === 'function' && define.amd) {
-    //   define([], function() {
-    //     return PolyBezier;
-    //   });
-    // }
-    // else {
       window.getStationName = getStationName;
       window.generateGeoJson = generateGeoJson;
-    // }
   }
-
-// module.exports = {
-//     getStationName: getStationName,
-//     generateGeoJson: generateGeoJson
-// }
