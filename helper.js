@@ -1,5 +1,4 @@
 function getStationName(list) {
-    console.log('here');
     var result = list.filter(item => item.Lang === 'zh-TW');
     return result.length > 0 ? result[0].Value : '未知站名';
 }
